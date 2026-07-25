@@ -8,11 +8,12 @@ if out_mod.start():
     file_path = str(input("Enter FASTA File Path: "))
     file_path = file_path.replace("\\","/")
     sequences = fasta_parser(file_path)
-    orfs = find_orfs(sequences)
+    minlen = out_mod.minlen()
+    orfs = find_orfs(sequences,minlen)
     proteins = translate(orfs)
-    stats = log_main(orfs,proteins,sequences)
+    gen_stats,seq_stats = log_main(orfs,proteins,sequences)
     choices = out_mod.ready()
-    out_mod.output(choices,orfs,proteins,stats)
+    out_mod.output(choices,orfs,proteins,gen_stats,seq_stats)
    
 else:
     print("Program Exited")

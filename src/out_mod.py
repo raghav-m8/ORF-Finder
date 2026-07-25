@@ -22,6 +22,9 @@ def ready():
             + "5.Exit")
     return giveout((input("Choice: ")))
 
+def minlen():
+    return int(input("Minimum ORF length (bp): "))
+
 def giveout(inp):
     choices = []
     i = int(inp.replace(",","").replace(" ",""))
@@ -30,27 +33,35 @@ def giveout(inp):
         i = i//10
     return choices
 
-def output(choices,orfs,proteins,stats):
+def output(choices,orfs,proteins,gen_stats,seq_stats):
     for i in choices:
         if i == 1: fasta_orf(orfs)
         elif i == 2: fasta_prot(proteins)
-        elif i == 3: txt(stats)
+        elif i == 3: txt(gen_stats,seq_stats)
         elif i == 4:  
             fasta_orf(orfs)
             fasta_prot(proteins)
-            txt(stats)
+            txt(gen_stats,seq_stats)
         elif i == 5: print("Program Exited")
     
-def txt(stat):
+def txt(gen_stats,seq_stats):
     txt = []
     txt.append("="*80 + "\n"
-                + "QUICK REPORT".center(80) + "\n"
+                + "ANALYSIS REPORT".center(80) + "\n"
                 + "="*80 + "\n"
             )
-    txt.append(f"Sequences Analysed: {stat.seqsana}\n")
-    txt.append(f"ORFs Found: {stat.orfs}\n")
-    txt.append(f"Proteins Found: {stat.prots}\n")
+    for seq_stat in seq_stats:
+        txt.append(f"Sequence ID: {seq_stat.id}\n")
+        txt.append(f"Sequence Description: {seq_stat.desc}\n")
+        txt.append(f"Sequence Length: {seq_stat.length}bp\n")
+        txt.append(f"Sequence GC Content(%): {seq_stat.gcc}%\n")
+        txt.append(f"Number of ORFs found in {seq_stat.id}: {seq_stat.norfs}\n")
+        txt.append("-"*80)
+    txt.append("="*80)
+    txt.append(f"Sequences Analysed: {gen_stats.seqsana}\n")
+    txt.append(f"Valid Sequences: {gen_stats.nvalid}\n")
+    txt.append(f"ORFs Found: {gen_stats.orfs}\n")
+    txt.append(f"Proteins Found: {gen_stats.prots}\n")
     with open("Analysis Report.txt","w") as report:
         report.write("".join(txt))
-        
 

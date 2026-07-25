@@ -22,8 +22,7 @@ class Protein():
         self.data = data
         self.seq = seq
         self.num = num
-        self.rf = rf
-        self.sense = sense
+        self.rf = f'+{rf}' if sense else f'-{rf}'
 
 def translate(orfs):
     proteins = []
@@ -45,4 +44,3 @@ def translate(orfs):
         )
         proteins.append(prot)
     return proteins
-            
